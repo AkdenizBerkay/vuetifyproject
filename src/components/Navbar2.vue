@@ -14,7 +14,7 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" fixed clipped app class="primary">
       <v-list-item>
-        <v-list-item-content>
+        <v-list-item-content>  
           <v-list-item-title class="font-weight-black">MENU</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
