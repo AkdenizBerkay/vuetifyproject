@@ -1,7 +1,17 @@
 <template>
-  <nav>
+  <nav>  <v-snackbar v-model="snackbar" :timeout="4000">
+    Projeniz başarıyla kaydedildi.
+    <!-- <template v-slot:action="{ attrs }"> -->
+      <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+        Close
+      </v-btn>
+    <!-- </template> -->
+  </v-snackbar>
     <v-app-bar app>
-      <v-app-bar-nav-icon class="grey--text" @click="drawer=!drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        class="grey--text"
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase grey--text">
         <span class="font-weight-light">Todo</span>
         <span>Ninja</span>
@@ -12,23 +22,36 @@
         <v-icon right>mdi-exit-to-app</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" app class="blue-grey darken-2" absolute style="height:100%">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      class="blue-grey darken-2"
+      absolute
+      style="height: 100%"
+    >
       <v-layout column align-center>
         <v-flex class="mt-5">
           <v-avatar size="100">
             <img src="/thegodfather.jpg" alt />
           </v-avatar>
-          <p class="black--text font-weight-bold subheading mt-1">The Godfather</p>
+          <p class="black--text font-weight-bold subheading mt-1">
+            The Godfather
+          </p>
         </v-flex>
         <v-flex class="mt-4 mb-3">
-          <Popup/>
+          <Popup @projectAdded="snackbar = true" />
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
       <v-list>
         <!-- <v-subheader class="font-weight-black">MENU</v-subheader> -->
         <v-list-item-group>
-          <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
+          <v-list-item
+            v-for="link in links"
+            :key="link.text"
+            router
+            :to="link.route"
+          >
             <v-list-item-icon>
               <v-icon class="white--text" v-text="link.icon"></v-icon>
             </v-list-item-icon>
@@ -42,20 +65,21 @@
   </nav>
 </template>
 <script>
-import Popup from "./Popup"
+import Popup from "./Popup";
 export default {
-  components:{
-    Popup
+  components: {
+    Popup,
   },
   data() {
     return {
       drawer: false,
+      snackbar: false,
       links: [
         { icon: "mdi-view-dashboard", text: "Dashboard", route: "/" },
         { icon: "mdi-folder", text: "My Projects", route: "/projects" },
-        { icon: "mdi-account-outline", text: "Cast", route: "/team" }
-      ]
+        { icon: "mdi-account-outline", text: "Cast", route: "/team" },
+      ],
     };
-  }
+  },
 };
 </script>

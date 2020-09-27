@@ -30,7 +30,8 @@
               min-width="290px"
             >
               <template v-slot:activator="{ on, attrs }">
-                <v-text-field :rules="inputRules"
+                <v-text-field
+                  :rules="inputRules"
                   v-model="dateFormatted"
                   label="Due date"
                   prepend-icon="mdi-calendar"
@@ -47,7 +48,8 @@
             </v-menu>
           </div>
           <div class="pt-5">
-            <v-textarea :rules="inputRules"
+            <v-textarea
+              :rules="inputRules"
               label="Information"
               v-model="content"
               prepend-icon="mdi-pencil"
@@ -57,31 +59,53 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="submit">Add project</v-btn>
+        <v-btn color="primary" @click="submit" :loading="loading">Add project</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
+  computed: { ...mapGetters(["getCustomers"]) },
   data() {
     return {
       dialog: false,
       title: "",
       content: "",
       date: new Date().toISOString().substr(0, 10),
-      dateFormatted: "",//this.formatDate(new Date().toISOString().substr(0, 10)),
+      dateFormatted: "", //this.formatDate(new Date().toISOString().substr(0, 10)),
       menu: false,
-      inputRules: [(v) => v && v.length >= 0 || "Zorunlu Alan"],
+      inputRules: [(v) => (v && v.length >= 0) || "Zorunlu Alan"],
       //datePickerRules: [(v) => v],
+      loading: false
     };
   },
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
-        this.dialog = false;
-        console.log(this.title, this.content);
+        this.loading=true;
+        let data = {
+          Name: this.title,
+          Surname: this.content,
+        };
+       
+
+        this.$store
+          .dispatch("saveCustomer", data)
+          .then(() => {
+            this.loading=false;
+             this.dialog = false;
+             this.title=null;
+             this.content=null;
+             this.dateFormatted=null;
+             this.$emit('projectAdded');
+          })
+          .catch(() => {
+            alert("hata aldı");
+             this.dialog = false;
+          });
       }
     },
     formatDate(date) {
