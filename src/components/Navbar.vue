@@ -1,13 +1,13 @@
 <template>
-  <nav>  <v-snackbar v-model="snackbar" :timeout="4000">
+  <nav>  
+    <v-app-bar app><v-snackbar v-model="snackbar" :timeout="4000" top>
     Projeniz başarıyla kaydedildi.
     <!-- <template v-slot:action="{ attrs }"> -->
-      <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+      <v-btn color="pink" text @click="snackbar = false">
         Close
       </v-btn>
     <!-- </template> -->
   </v-snackbar>
-    <v-app-bar app>
       <v-app-bar-nav-icon
         class="grey--text"
         @click="drawer = !drawer"
@@ -78,6 +78,7 @@ export default {
         { icon: "mdi-view-dashboard", text: "Dashboard", route: "/" },
         { icon: "mdi-folder", text: "My Projects", route: "/projects" },
         { icon: "mdi-account-outline", text: "Cast", route: "/team" },
+        { icon: "mdi-human-queue", text: "Customers", route: "/customers"},
       ],
     };
   },
