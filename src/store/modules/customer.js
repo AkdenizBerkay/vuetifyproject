@@ -13,30 +13,17 @@ const mutations = {
     addCustomer(state, customer) {
         state.customers.push(customer);
     },
-    updateCustomer(state,customer) {
-        //console.log("customer: " + JSON.stringify(customer));
-        
-        //console.log("edit customer id "+customer.customerId);
-        //var data = JSON.parse(state.customers);
-        //console.log("parsed data: " + data);
-        
-        console.log(state.customers);
-        //var oldData = state.customers.filter(d => d.customerId === customer.customerId);
-        //alert("şimdi atacak");
-        //var index= state.customers.indexOf(oldData);
-        
-        state.customers[customer.key] = customer;
-        //alert("index "+ index)
-        //state.customers.splice(index-1,1);
-        //console.log(state.customers);
-        //alert("şimdi ekleyecek");
-        //state.customers.push(customer);
-        
-        //console.log(state.customers + customer);
-    //    var a = state.customers.filter(k => {
-    //          k.customerId == customer.customerId;
-    //      });console.log(a);
-        /*console.log("eskicustomer: " + JSON.stringify(benimdata));*/
+    updateCustomer(state, customer) {
+        //update edilecek datanın index ini bulduk
+        const index = state.customers.findIndex(k => k.customerId === customer.customerId);
+        //arrayımizden bulduğumuz indexdeki datayı çıkardık.
+        state.customers.splice(index, 1);
+        //arrayimizde bulduğumuz indexe yeni datayı ekledik.
+        state.customers.splice(index, 0, customer);
+    },
+    deleteCustomer(state, customerId) {
+        const index = state.customers.findIndex(k => k.customerId === customerId);
+        state.customers.splice(index, 1);
     },
     initialCustomers(state, customers) {
         state.customers = customers;
@@ -44,15 +31,12 @@ const mutations = {
 }
 
 const actions = {
-    addCustomer({ state,commit }, data) {
+    addCustomer({ commit }, data) {
         return new Promise((resolve, reject) => {
             return axios.post("/Customer2/Save", data)
                 .then(response => {
+                    commit("addCustomer", response.data);
                     resolve(response);
-                    commit("addCustomer", data);
-                    console.log("state: ");
-                    console.log(state.customers);
-                    console.log("state: ");
                 })
                 .catch(function (error) {
                     reject(error);
@@ -64,22 +48,9 @@ const actions = {
         return new Promise((resolve, reject) => {
             return axios.get("/Customer2/GetAll")
                 .then(response => {
-                    resolve(response);
                     if (state.customers.length == 0) {
                         commit("initialCustomers", response.data);
                     }
-                })
-                .catch(function (error) {
-                    reject(error);
-                    console.log(error);
-                })
-        })
-    },
-    // eslint-disable-next-line no-unused-vars
-    updateCustomer({commit},data) {
-        return new Promise((resolve, reject) => {
-            return axios.put("/Customer2/Update", data)
-                .then(response => {
                     resolve(response);
                 })
                 .catch(function (error) {
@@ -88,6 +59,33 @@ const actions = {
                 })
         })
     },
+    /*// eslint-disable-next-line no-unused-vars: kullanmadığın bir objen varsa hatayı engeller.*/
+    updateCustomer({ commit }, data) {
+        return new Promise((resolve, reject) => {
+            return axios.put("/Customer2/Update", data)
+                .then(response => {
+                    commit("updateCustomer", data);
+                    resolve(response);
+                })
+                .catch(function (error) {
+                    console.log("error: " + error);
+                    reject(error);
+                })
+        })
+    },
+    deleteCustomer({ commit }, data) {
+        return new Promise((resolve, reject) => {
+            return axios.delete("/Customer2/Delete/" + data.customerId)
+                .then(response => {
+                    commit("deleteCustomer", data.customerId);
+                    resolve(response);
+                })
+                .catch(function (error) {
+                    reject(error);
+                    console.log(error);
+                })
+        })
+    }
 }
 
 export default {
