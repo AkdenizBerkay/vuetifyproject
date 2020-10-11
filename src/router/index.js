@@ -4,6 +4,8 @@ import Dashboard from '../views/Dashboard.vue'
 import Projects from '../views/Projects.vue'
 import Team from '../views/Team.vue'
 import Customers from '../views/Customers.vue'
+import Billboard from '../views/Billboard.vue'
+import CreateBillboard from '../views/CreateBillboard.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +29,16 @@ const routes = [
     path: '/customers',
     name: 'customers',
     component: Customers
+  },
+  {
+    path: '/billboard',
+    name: 'billboard',
+    component: Billboard
+  },
+  {
+    path: '/createbillboard',
+    name: 'CreateBillboard',
+    component: CreateBillboard
   }
 ]
 

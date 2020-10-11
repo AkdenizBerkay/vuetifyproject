@@ -79,6 +79,7 @@ export default {
         { icon: "mdi-folder", text: "My Projects", route: "/projects" },
         { icon: "mdi-account-outline", text: "Cast", route: "/team" },
         { icon: "mdi-human-queue", text: "Customers", route: "/customers"},
+        { icon: "mdi-newspaper", text: "Billboard", route: "/billboard"},
       ],
     };
   },
