@@ -32,7 +32,7 @@
                     outlined
                   ></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm12 md12>
+                <!-- <v-flex xs12 sm12 md12>
                   <v-file-input
                     type="file"
                     outlined
@@ -41,7 +41,7 @@
                     label="Profile Image"
                     @change="saveProfileImage2"
                   ></v-file-input>
-                </v-flex>
+                </v-flex> -->
                 <v-flex xs12 sm12 md12>
                   <v-file-input
                     type="file"
@@ -139,20 +139,23 @@ export default {
     billboard: {
       Name: "",
       Content: "",
-      Image: {
-        Name: "",
-        Base64Name: "",
-      },
       BillboardImages: [
       ],
       CustomerId: 2,
+      Status:"Draft",
+      Date:"13.10.2020"
     },
+    // Image: {
+    //     Name: "",
+    //     Base64Name: "",
+    //     IsProfile:false
+    //   },
   }),
   methods: {
     save() {
       this.$store
         .dispatch("addBillboard", this.billboard)
-        .then((response) => {
+        .then((response) => { console.log(response);
           if (response.status == 204) {
             this.isOk = true;
             this.snackbartext = "Success billboard is saved";
@@ -168,7 +171,7 @@ export default {
     },
     close() {
       this.dialog = false;
-    },
+    },/*
     saveProfileImage(e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -189,14 +192,17 @@ export default {
         vm.billboard.Image.Name = file.name;
       };
       reader.readAsDataURL(file);
-    },
+    },*/
     uploadProfileImage(e) {
       var reader = new FileReader();
       var vm = this;
       reader.readAsDataURL(e);
       reader.onload = (k) => {
-        vm.billboard.Image.Base64Name = k.target.result;
-        vm.billboard.Image.Name = e.name;
+        var image = {};
+        image.Base64Name = k.target.result;
+        image.Name = e.name;
+        image.IsProfile = true;
+        vm.billboard.BillboardImages.push(image);
       };
     },
     uploadImages(e) {
@@ -208,6 +214,7 @@ export default {
           var image = {};
           image.Name = element.name;
           image.Base64Name = k.target.result;
+          image.IsProfile = false;
           vm.billboard.BillboardImages.push(image);
         };
       });

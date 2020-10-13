@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const state = {/*
-    customers: []*/
+const state = {
+    billboards: []
 }
 
 const getters = {/*
@@ -9,10 +9,10 @@ const getters = {/*
         return state.customers;
     }*/
 }
-const mutations = {/*
-    addCustomer(state, customer) {
-        state.customers.push(customer);
-    },
+const mutations = {
+    addBillboard(state, billboard) {
+        state.billboards.push(billboard);
+    },/*
     updateCustomer(state, customer) {
         //update edilecek datanın index ini bulduk
         const index = state.customers.findIndex(k => k.customerId === customer.customerId);
@@ -33,7 +33,6 @@ const mutations = {/*
 const actions = {
     addBillboard({ commit }, data) {
         return new Promise((resolve, reject) => {
-            console.log(data);
             return axios.post("/Billboard/Save2", data)
                 .then(response => {
                     commit("addBillboard", response.data);
