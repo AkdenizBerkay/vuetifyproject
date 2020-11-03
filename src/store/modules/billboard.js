@@ -1,13 +1,14 @@
 import axios from 'axios';
 
 const state = {
-    billboards: []
+    billboards: [],
+    detailBillboard:{}
 }
 
-const getters = {/*
-    getCustomers(state) {
-        return state.customers;
-    }*/
+const getters = {
+    getBillboards(state) {
+        return state.billboards;
+    }
 }
 const mutations = {
     addBillboard(state, billboard) {
@@ -24,10 +25,10 @@ const mutations = {
     deleteCustomer(state, customerId) {
         const index = state.customers.findIndex(k => k.customerId === customerId);
         state.customers.splice(index, 1);
-    },
-    initialCustomers(state, customers) {
-        state.customers = customers;
-    }*/
+    },*/
+    initialBillboards(state, billboards) {
+        state.billboards = billboards;
+    }
 }
 
 const actions = {
@@ -43,22 +44,23 @@ const actions = {
                     console.log(error);
                 })
         })
-    },/*
-    getCustomers({ commit, state }) {
+    },
+    getBillboards({ commit, state }) {
         return new Promise((resolve, reject) => {
-            return axios.get("/Customer2/GetAll")
-                .then(response => {
-                    if (state.customers.length == 0) {
-                        commit("initialCustomers", response.data);
+            return axios.get("/Billboard/BillboardsWithImages")
+                .then(response => { //console.log(response);
+                    if (state.billboards.length == 0) {
+                        commit("initialBillboards", response.data);
                     }
                     resolve(response);
                 })
                 .catch(function (error) {
+                    alert("catch de");
                     reject(error);
                     console.log(error);
                 })
         })
-    },*/
+    },/**/
     /*// eslint-disable-next-line no-unused-vars: kullanmadığın bir objen varsa hatayı engeller.*/
     /*updateCustomer({ commit }, data) {
         return new Promise((resolve, reject) => {

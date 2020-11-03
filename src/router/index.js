@@ -6,7 +6,7 @@ import Team from '../views/Team.vue'
 import Customers from '../views/Customers.vue'
 import Billboard from '../views/Billboard.vue'
 import CreateBillboard from '../views/CreateBillboard.vue'
-
+import DetailBillboard from '../views/DetailBillboard.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,6 +39,11 @@ const routes = [
     path: '/createbillboard',
     name: 'CreateBillboard',
     component: CreateBillboard
+  },
+  {
+    path: '/detailbillboard',
+    name: 'DetailBillboard',
+    component: DetailBillboard
   }
 ]
 

@@ -88,30 +88,34 @@
       <v-spacer></v-spacer>
       <v-card-text>
         <v-flex class="d-flex justify-start">
-          <v-card max-width="344">
+          <v-card  class="ma-3"
+            max-width="344"
+            v-for="billboard in billboards"
+            :key="`${billboard.billboardId}`"
+            :id="`${billboard.billboardId}`"
+          >
             <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-              height="200px"
+              :src="`${billboard.billboardImages[0].base64Name}`"
+              height="200px" width="200px"
             ></v-img>
 
-            <v-card-title> Top western road trips </v-card-title>
+            <v-card-title> {{ billboard.name }} </v-card-title>
 
-            <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+            <v-card-subtitle> {{getBillboardContent(billboard.content)}} </v-card-subtitle>
 
             <v-card-actions>
-              <v-btn color="orange lighten-2" text> Explore </v-btn>
-
+              <v-btn color="red lighten-2" text @click="Detail(billboard)"> Explore </v-btn>
               <v-spacer></v-spacer>
 
-              <v-btn icon @click="show = !show">
-                <v-icon>{{
+              <!-- <v-btn icon @click="showCardText(billboard.billboardId)" :id="'billboardButton_'+`${billboard.billboardId}`">
+                <v-icon :id="'billboardIcon_'+`${billboard.billboardId}`">{{
                   show ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-card-actions>
 
-            <v-expand-transition>
-              <div v-show="show">
+            <!-- <v-expand-transition>
+              <div :id="'billboardDescription_'+`${billboard.billboardId}`" :ref="'billboardDescription_'+`${billboard.billboardId}`" style="display:none">
                 <v-divider></v-divider>
 
                 <v-card-text>
@@ -123,7 +127,7 @@
                   way to escape.
                 </v-card-text>
               </div>
-            </v-expand-transition>
+            </v-expand-transition> -->
           </v-card>
         </v-flex>
       </v-card-text>
@@ -132,30 +136,51 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
+    goster: false,
     show: false,
     dialog: false,
     billboard: {
       Name: "",
       Content: "",
-      BillboardImages: [
-      ],
+      BillboardImages: [],
+      Customer:{},
       CustomerId: 2,
-      Status:"Draft",
-      Date:"13.10.2020"
+      Status: "Draft",
+      Date: "13.10.2020",
     },
-    // Image: {
-    //     Name: "",
-    //     Base64Name: "",
-    //     IsProfile:false
-    //   },
+    display:""
   }),
+  created() {
+    this.$store
+      .dispatch("getBillboards")
+      .then()
+      .catch((ex) => {
+        alert("hata oluştu.");
+        console.log(ex);
+      });
+  },
   methods: {
+    getBillboardContent(billboardContent){
+      return billboardContent.substring(0,15) + '...';
+    },
+    // showCardText(billboardId){
+      
+    //   console.log(this.$refs["billboardDescription_"+billboardId]);
+    //   this.$refs["billboardDescription_"+billboardId][0].style.display="block";
+    //   this.$refs["billboardDescription_12"][0].style.display="none";
+    // },
+    Detail(billboard){
+      
+      this.$store.state.detailBillboard = billboard;
+      this.$router.push("/detailbillboard");
+    },
     save() {
       this.$store
         .dispatch("addBillboard", this.billboard)
-        .then((response) => { console.log(response);
+        .then((response) => {
           if (response.status == 204) {
             this.isOk = true;
             this.snackbartext = "Success billboard is saved";
@@ -163,6 +188,7 @@ export default {
             this.isOk = false;
             this.snackbartext = "Error billboard couldn't be saved";
           }
+          this.dialog = false;
         })
         .catch((ex) => {
           alert("hata");
@@ -171,28 +197,7 @@ export default {
     },
     close() {
       this.dialog = false;
-    },/*
-    saveProfileImage(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      this.createImage(files[0]);
     },
-    saveProfileImage2(e) {
-      var files = e;
-
-      this.createImage(files);
-    },
-    createImage(file) {
-      //var image = new Image();
-      var reader = new FileReader();
-      var vm = this;
-
-      reader.onload = (e) => {
-        vm.billboard.Image.Base64Name = e.target.result;
-        vm.billboard.Image.Name = file.name;
-      };
-      reader.readAsDataURL(file);
-    },*/
     uploadProfileImage(e) {
       var reader = new FileReader();
       var vm = this;
@@ -203,6 +208,7 @@ export default {
         image.Name = e.name;
         image.IsProfile = true;
         vm.billboard.BillboardImages.push(image);
+
       };
     },
     uploadImages(e) {
@@ -223,6 +229,11 @@ export default {
     // AddBillboard() {
     //   this.$router.push({ name: "CreateBillboard" });
     // },
+  },
+  computed: {
+    ...mapGetters({
+      billboards: "getBillboards",
+    }),
   },
 };
 </script>
