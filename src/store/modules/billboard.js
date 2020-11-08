@@ -47,20 +47,36 @@ const actions = {
     },
     getBillboards({ commit, state }) {
         return new Promise((resolve, reject) => {
-            return axios.get("/Billboard/BillboardsWithImages")
-                .then(response => { //console.log(response);
+            return axios.get("/Billboard/BillboardsWithImagesAndOwner")
+                .then(response => {
                     if (state.billboards.length == 0) {
                         commit("initialBillboards", response.data);
                     }
                     resolve(response);
                 })
-                .catch(function (error) {
+                .catch(function (error) {console.log(error);
                     alert("catch de");
                     reject(error);
-                    console.log(error);
+                    
                 })
         })
-    },/**/
+    },
+    /* eslint-disable no-unused-vars */
+    getBillboardCustomer({commit},customerId) {
+        return new Promise((resolve, reject) => {
+            return axios.get("/Customer2/GetById/"+customerId)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(function (error) {console.log(error);
+                    alert("catch de");
+                    reject(error);
+                    
+                })
+        })
+    },
+    
+    /**/
     /*// eslint-disable-next-line no-unused-vars: kullanmadığın bir objen varsa hatayı engeller.*/
     /*updateCustomer({ commit }, data) {
         return new Promise((resolve, reject) => {
